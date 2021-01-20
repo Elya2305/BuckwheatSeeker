@@ -19,13 +19,13 @@ public class CategoryClientImpl extends AbstractHttpClient implements CategoryCl
 
     private static final String AUCHAN_CATEGORIES = "https://stores-api.zakaz.ua/stores/48246401/categories";
     private static final String METRO_CATEGORIES = "https://stores-api.zakaz.ua/stores/48215611/categories";
-    private static final String ATB_CATEGORIES = "https://stores-api.zakaz.ua/stores/48280214/categories/";
+    private static final String EKO_MARKET_CATEGORIES = "https://stores-api.zakaz.ua/stores/48280214/categories/";
 
     {
         shopUrls = new HashMap<>();
         shopUrls.put(Shop.AUCHAN, AUCHAN_CATEGORIES);
         shopUrls.put(Shop.METRO, METRO_CATEGORIES);
-        shopUrls.put(Shop.EKO_MARKET, ATB_CATEGORIES);
+        shopUrls.put(Shop.EKO_MARKET, EKO_MARKET_CATEGORIES);
     }
 
     public CategoryClientImpl(RestTemplate restTemplate) {
@@ -39,6 +39,8 @@ public class CategoryClientImpl extends AbstractHttpClient implements CategoryCl
 
     @Override
     public HttpHeaders headers() {
-        return new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("accept-language", "ru-RU");
+        return headers;
     }
 }

@@ -31,5 +31,5 @@ public class Product {
 
     private Integer weight;
 
-    private List<Shop> shops;
+//    private List<Shop> shops;
 }
