@@ -1,12 +1,17 @@
 package com.progastination.entity;
 
+import com.progastination.utils.converter.ShopConverter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -15,13 +20,13 @@ import java.util.List;
 public class Product {
 
     @Id
-    private String id;
+    private String identifier;
 
     private String categoryId;
 
     private String ean;
 
-    private String img;
+    private String image;
 
     private Integer price;
 
@@ -31,5 +36,11 @@ public class Product {
 
     private Integer weight;
 
-//    private List<Shop> shops;
+    @Column(columnDefinition = "TEXT")
+    @Convert(converter = ShopConverter.class)
+    private Set<Shop> shops = new HashSet<>();
+
+    public void addShop(Shop shop) {
+        this.shops.add(shop);
+    }
 }
