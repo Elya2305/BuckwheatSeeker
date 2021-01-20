@@ -10,13 +10,12 @@ import java.util.List;
 @Data
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ProductDto {
-    private String category_id;
+    private String categoryId;
     private String ean;
-    private List<String> gallery;
-    private List<String> img;
+    private String img;
     private Integer price;
     private String title;
-    private String web_url;
+    private String webUrl;
     private Integer weight;
 
 }
