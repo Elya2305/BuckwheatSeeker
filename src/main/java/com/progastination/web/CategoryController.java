@@ -1,25 +1,32 @@
 package com.progastination.web;
 
 import com.progastination.dto.CategoryDto;
-import com.progastination.entity.Shop;
-import com.progastination.utils.client.CategoryClient;
-import com.progastination.utils.data.CategorySaveToDb;
+import com.progastination.service.CategoryService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/categories")
 public class CategoryController {
-    private final CategoryClient categoryClient;
-    private final CategorySaveToDb categorySaveToDb;
+    private final CategoryService categoryService;
 
-    @GetMapping
-    private List<CategoryDto> all() {
-        return categoryClient.categories(Shop.EKO_MARKET);
+    @GetMapping("/main")
+    public List<CategoryDto> mainCategories() {
+        log.info("Request on getting main categories");
+        return categoryService.mainCategories();
+    }
+
+    @GetMapping("/sub-categories")
+    public List<CategoryDto> subCategories(@RequestParam String identifier) {
+        log.info("Request on getting sub categories by identifier {}", identifier);
+        return categoryService.subCategories(identifier);
     }
 }

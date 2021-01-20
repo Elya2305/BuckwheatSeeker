@@ -1,7 +1,9 @@
 package com.progastination.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.progastination.entity.Shop;
 import lombok.Data;
 
 import java.util.Set;
@@ -15,4 +17,5 @@ public class CategoryDto {
     private String parentId;
     private String title;
     private Set<CategoryDto> children;
+    private Set<Shop> shopAvailable;
 }

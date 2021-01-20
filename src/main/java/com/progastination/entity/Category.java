@@ -15,15 +15,11 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "category")
 @ToString(exclude = {"category"})
 public class Category {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     @Id
     private String identifier;
 
     private String title;
 
-//    @JoinColumn(name = "parent_identifier")
     @ManyToOne()
     private Category category;
 
