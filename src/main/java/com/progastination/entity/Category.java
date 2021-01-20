@@ -20,7 +20,7 @@ public class Category {
 
     private String title;
 
-    @ManyToOne()
+    @ManyToOne
     private Category category;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
@@ -29,10 +29,6 @@ public class Category {
     private Integer count;
 
     private String image;
-
-    public Set<Category> getSubCategories() {
-        return subCategories;
-    }
 
     @Column(columnDefinition = "TEXT")
     @Convert(converter = ShopConverter.class)
