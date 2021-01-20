@@ -38,7 +38,8 @@ public class ProductSaveToDb {
 
     public void loadDb() {
         log.info("*starting to init products*");
-        Arrays.stream(Shop.values()).forEach(shop -> productClient.products(shop).forEach(this::mapAndSave));
+        Arrays.stream(Shop.values()).forEach(shop -> productClient.products(shop)
+                .forEach(o->o.getResults().forEach(this::mapAndSave)));
         log.info("*ending to init products*");
     }
 

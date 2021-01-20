@@ -1,6 +1,7 @@
 package com.progastination.web;
 
 import com.progastination.dto.ProductDto;
+import com.progastination.dto.ProductsListDto;
 import com.progastination.entity.Shop;
 import com.progastination.utils.client.ProductClient;
 import com.progastination.utils.data.ProductSaveToDb;
@@ -19,7 +20,7 @@ public class ProductController {
     private final ProductSaveToDb productSaveToDb;
 
     @GetMapping
-    private List<ProductDto> all() {
+    private List<ProductsListDto> all() {
         return productClient.products(Shop.AUCHAN);
     }
 }
