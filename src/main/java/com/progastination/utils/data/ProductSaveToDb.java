@@ -31,16 +31,16 @@ public class ProductSaveToDb {
 
     @PostConstruct
     public void init() {
-        if (productRepository.count() == 0) {
-            loadDb();
-        }
+//        if (productRepository.count() == 0) {
+//            loadDb();
+//        }
     }
 
     public void loadDb() {
-        log.info("*starting to init products*");
-        Arrays.stream(Shop.values()).forEach(shop -> productClient.products(shop)
-                .forEach(o->o.getResults().forEach(this::mapAndSave)));
-        log.info("*ending to init products*");
+//        log.info("*starting to init products*");
+//        Arrays.stream(Shop.values()).forEach(shop -> productClient.products(shop)
+//                .forEach(o->o.getResults().forEach(this::mapAndSave)));
+//        log.info("*ending to init products*");
     }
 
     private void mapAndSave(ProductDto dto) {

@@ -1,6 +1,7 @@
 package com.progastination.utils.client.impl;
 
 import com.progastination.dto.ListProductDtoResponse;
+import com.progastination.dto.ProductResponseDto;
 import com.progastination.dto.ProductsListDto;
 import com.progastination.entity.Shop;
 import com.progastination.utils.AbstractHttpClient;
@@ -30,8 +31,8 @@ public class ProductClientImpl extends AbstractHttpClient implements ProductClie
     }
 
     @Override
-    public List<ProductsListDto> products(Shop shop) {
-        return get(shopUrls.get(shop), ListProductDtoResponse.class);
+    public ProductResponseDto products(Shop shop) {
+        return get(shopUrls.get(shop), ProductResponseDto.class);
     }
 
     @Override
