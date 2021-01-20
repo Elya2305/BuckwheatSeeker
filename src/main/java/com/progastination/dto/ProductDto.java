@@ -11,12 +11,11 @@ import java.util.List;
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ProductDto {
     private String ean;
-
-//    private String categoryId;
-//    private String img;
-//    private Integer price;
-//    private String title;
-//    private String webUrl;
-//    private Integer weight;
+    private String categoryId;
+    private ImgDto img;
+    private Integer price;
+    private String title;
+    private String webUrl;
+    private Integer weight;
 
 }
