@@ -1,6 +1,7 @@
 package com.progastination.web;
 
 import com.progastination.dto.ProductDto;
+import com.progastination.entity.Shop;
 import com.progastination.utils.client.ProductClient;
 import com.progastination.utils.data.ProductSaveToDb;
 import lombok.AllArgsConstructor;
@@ -12,13 +13,13 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/зкщвгсеы")
+@RequestMapping("/product")
 public class ProductController {
     private final ProductClient productClient;
     private final ProductSaveToDb productSaveToDb;
 
-//    @GetMapping
-//    private List<ProductDto> all() {
-//        return productClient.products();
-//    }
+    @GetMapping
+    private List<ProductDto> all() {
+        return productClient.products(Shop.AUCHAN);
+    }
 }
