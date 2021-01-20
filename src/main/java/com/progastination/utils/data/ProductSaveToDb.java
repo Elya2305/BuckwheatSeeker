@@ -43,29 +43,28 @@ public class ProductSaveToDb {
     }
 
     private void mapAndSave(ProductDto dto) {
-        if (nonNull(dto) && identifierExists(dto.getId()))
+        if (nonNull(dto) && identifierExists(dto.getEan()))
             productRepository.save(map(dto));
     }
 
     private Product map(ProductDto source) {
-        Product destination = getOrCreate(getIdentifier(source.getId()));
-        destination.setIdentifier(getIdentifier(source.getId()));
-        destination.setCategoryId(source.getCategoryId());
+        Product destination = getOrCreate(getEan(source.getEan()));
+//        destination.setCategoryId(getCategoryId(source.getCategoryId()));
         destination.setEan(getEan(source.getEan()));
-        destination.setImage(source.getImg());
-        destination.setPrice(source.getPrice());
-        destination.setTitle(source.getTitle());
-        destination.setWebUrl(source.getWebUrl());
-        destination.setWeight(source.getWeight());
-        destination.addShop(getShopByIdentifier(source.getId()));
+//        destination.setImage(source.getImg());
+//        destination.setPrice(source.getPrice());
+//        destination.setTitle(source.getTitle());
+//        destination.setWebUrl(source.getWebUrl());
+//        destination.setWeight(source.getWeight());
+//        destination.addShop(getShopByCategoryId(source.getCategoryId()));
         return destination;
     }
 
-    private Product getOrCreate(String identifier) {
-        return productRepository.findByIdentifier(identifier).orElse(new Product());
+    private Product getOrCreate(String ean) {
+        return productRepository.findByEan(ean).orElse(new Product());
     }
 
-    private String getIdentifier(String fullIdentifier) {
+    private String getCategoryId(String fullIdentifier) {
         if (isNull(fullIdentifier)) return null;
         return Arrays.stream(fullIdentifier.split(DELIMITER))
                 .filter(o -> !Shop.allIdentifiers().contains(o))
@@ -77,7 +76,7 @@ public class ProductSaveToDb {
         return fullEan.replaceAll(LETTER_PATTERN,"");
     }
 
-    private Shop getShopByIdentifier(String fullIdentifier) {
+    private Shop getShopByCategoryId(String fullIdentifier) {
         String[] all = fullIdentifier.split(DELIMITER);
         return Shop.getByIdentifier(all[all.length - 1]);
     }

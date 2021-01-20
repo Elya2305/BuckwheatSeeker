@@ -20,27 +20,25 @@ import java.util.Set;
 public class Product {
 
     @Id
-    private String identifier;
-
-    private String categoryId;
-
     private String ean;
 
-    private String image;
-
-    private Integer price;
-
-    private String title;
-
-    private String webUrl;
-
-    private Integer weight;
-
-    @Column(columnDefinition = "TEXT")
-    @Convert(converter = ShopConverter.class)
-    private Set<Shop> shops = new HashSet<>();
-
-    public void addShop(Shop shop) {
-        this.shops.add(shop);
-    }
+//    private String categoryId;
+//
+//    private String image;
+//
+//    private Integer price;
+//
+//    private String title;
+//
+//    private String webUrl;
+//
+//    private Integer weight;
+//
+//    @Column(columnDefinition = "TEXT")
+//    @Convert(converter = ShopConverter.class)
+//    private Set<Shop> shops = new HashSet<>();
+//
+//    public void addShop(Shop shop) {
+//        this.shops.add(shop);
+//    }
 }
