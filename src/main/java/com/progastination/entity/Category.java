@@ -1,10 +1,13 @@
 package com.progastination.entity;
 
+import com.progastination.utils.converter.ShopConverter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -12,15 +15,19 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "category")
 @ToString(exclude = {"category"})
 public class Category {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     @Id
     private String identifier;
 
     private String title;
 
-    @ManyToOne
+//    @JoinColumn(name = "parent_identifier")
+    @ManyToOne()
     private Category category;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
     private Set<Category> subCategories;
 
     private Integer count;
@@ -31,13 +38,11 @@ public class Category {
         return subCategories;
     }
 
-    public void addSubCategory(Category category) {
-        this.subCategories.add(category);
-        category.setCategory(this);
-    }
+    @Column(columnDefinition = "TEXT")
+    @Convert(converter = ShopConverter.class)
+    private Set<Shop> shops = new HashSet<>();
 
-    public void removeSubCategory(Category category) {
-        this.subCategories.remove(category);
-        category.setCategory(null);
+    public void addShop(Shop shop) {
+        this.shops.add(shop);
     }
 }
