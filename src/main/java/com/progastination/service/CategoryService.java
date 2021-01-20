@@ -1,11 +1,12 @@
 package com.progastination.service;
 
 import com.progastination.dto.CategoryDto;
+import com.progastination.utils.pagination.PageDto;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryDto> mainCategories();
+    PageDto<CategoryDto> mainCategories(int page, int pageSize);
 
-    List<CategoryDto> subCategories(String identifier);
+    PageDto<CategoryDto> subCategories(String identifier, int page, int pageSize);
 }
