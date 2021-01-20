@@ -20,22 +20,24 @@ public class ProductClientImpl extends AbstractHttpClient implements ProductClie
 
     private static final String AUCHAN_PRODUCTS = "https://stores-api.zakaz.ua/stores/48246407/categories/fruits-and-vegetables-auchan/products";
 
-    public ProductClientImpl(RestTemplate restTemplate) {
-        super(restTemplate);
-    }
-
     {
         shopUrls = new HashMap<>();
         shopUrls.put(Shop.AUCHAN, AUCHAN_PRODUCTS);
     }
 
+    public ProductClientImpl(RestTemplate restTemplate) {
+        super(restTemplate);
+    }
+
     @Override
     public List<ProductDto> products(Shop shop) {
-        return get(AUCHAN_PRODUCTS, ListProductDtoResponse.class);
+        return get(shopUrls.get(shop), ListProductDtoResponse.class);
     }
 
     @Override
     public HttpHeaders headers() {
-        return new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("accept-language", "ru-RU");
+        return headers;
     }
 }
