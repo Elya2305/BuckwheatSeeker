@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -29,24 +30,25 @@ public class ProductInit {
     private final CategoryRepository categoryRepository;
     private final static String DELIMITER = "-";
     private final static String LETTER_PATTERN = "[^\\d.]";
+    private List<Shop> newShops;
+
 
     @PostConstruct
     public void init() {
+        newShops = productRepository.getDistinctShops().stream()
+                .flatMap(Collection::stream).collect(Collectors.toList());
         if (checkNewPresent()) {
             loadDb();
         }
     }
 
     private boolean checkNewPresent() {
-        List<Shop> collect = productRepository.getDistinctShops().stream()
-                .flatMap(Collection::stream).collect(Collectors.toList());
-        return Arrays.stream(Shop.values()).anyMatch(o -> !collect.contains(o));
+        return Arrays.stream(Shop.values()).anyMatch(o -> !newShops.contains(o));
     }
 
     private List<Shop> newShops() {
-        List<Shop> collect = productRepository.getDistinctShops().stream()
-                .flatMap(Collection::stream).collect(Collectors.toList());
-        return Arrays.stream(Shop.values()).filter(o -> !collect.contains(o)).collect(Collectors.toList());
+        return Arrays.stream(Shop.values()).filter(o -> !newShops.contains(o))
+                .collect(Collectors.toList());
     }
 
     public void loadDb() {
