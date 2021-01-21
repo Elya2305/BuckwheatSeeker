@@ -22,7 +22,4 @@ public interface CategoryRepository extends JpaRepository<Category, String>, Pag
     @Query("select c from Category c where c.category.identifier=:parentIdentifier")
     Page<Category> findSubCategories(@Param("parentIdentifier") String parentIdentifier, Pageable pageable);
 
-    // todo
-    @Query(value = "SELECT * FROM category WHERE shops LIKE CONCAT('%',:shop,'%')", nativeQuery = true)
-    List<Category> allThatShopContains(@Param("shop") String shop);
 }
