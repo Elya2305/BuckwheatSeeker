@@ -16,7 +16,6 @@ import java.util.Map;
 @Service
 public class CategoryClientImpl extends AbstractHttpClient implements CategoryClient {
     private final Map<Shop, String> shopUrls;
-
     private static final String AUCHAN_CATEGORIES = "https://stores-api.zakaz.ua/stores/48246401/categories";
     private static final String METRO_CATEGORIES = "https://stores-api.zakaz.ua/stores/48215611/categories";
     private static final String EKO_MARKET_CATEGORIES = "https://stores-api.zakaz.ua/stores/48280214/categories/";
