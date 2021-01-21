@@ -31,6 +31,9 @@ public class Product {
 
     private Integer weight;
 
+    @ManyToOne
+    private Category category; // parentCategoryId
+
     @Column(columnDefinition = "TEXT")
     @Convert(converter = ShopConverter.class)
     private Set<Shop> shops = new HashSet<>();

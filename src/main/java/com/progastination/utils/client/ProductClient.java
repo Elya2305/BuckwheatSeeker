@@ -5,5 +5,6 @@ import com.progastination.entity.Shop;
 
 public interface ProductClient {
 
-    ProductResponseDto products(Shop shop);
+    ProductResponseDto products(String category, Shop shop);
+
 }

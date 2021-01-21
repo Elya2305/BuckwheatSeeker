@@ -1,8 +1,10 @@
 package com.progastination.utils.data;
 
 import com.progastination.dto.ProductDto;
+import com.progastination.entity.Category;
 import com.progastination.entity.Product;
 import com.progastination.entity.Shop;
+import com.progastination.repository.CategoryRepository;
 import com.progastination.repository.ProductRepository;
 import com.progastination.utils.client.ProductClient;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -22,26 +26,49 @@ import static java.util.Objects.nonNull;
 public class ProductInit {
     private final ProductClient productClient;
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     private final static String DELIMITER = "-";
     private final static String LETTER_PATTERN = "[^\\d.]";
 
     @PostConstruct
     public void init() {
-        if (productRepository.count() == 0) {
+        if (checkNewPresent()) {
             loadDb();
         }
     }
 
+    private boolean checkNewPresent() {
+        List<Shop> collect = productRepository.getDistinctShops().stream()
+                .flatMap(Collection::stream).collect(Collectors.toList());
+        return Arrays.stream(Shop.values()).anyMatch(o -> !collect.contains(o));
+    }
+
+    private List<Shop> newShops() {
+        List<Shop> collect = productRepository.getDistinctShops().stream()
+                .flatMap(Collection::stream).collect(Collectors.toList());
+        return Arrays.stream(Shop.values()).filter(o -> !collect.contains(o)).collect(Collectors.toList());
+    }
+
     public void loadDb() {
         log.info("*starting to init products*");
-        Arrays.stream(Shop.values()).forEach(shop -> productClient.products(shop).getResults()
-                .forEach(this::mapAndSave));
+        List<Category> categories = categoryRepository.findAll();
+        for (Shop shop : newShops()) {
+            for (Category category : categories) {
+                if (category.getShops().contains(shop)) {
+                    List<ProductDto> results = productClient.products(getFullIdentifier(category.getIdentifier(), shop), shop).getResults();
+                    List<Product> map = map(results, category, shop);
+                    productRepository.saveAll(map);
+                }
+            }
+        }
         log.info("*ending to init products*");
     }
 
-    private void mapAndSave(ProductDto dto) {
-        if (nonNull(dto))
-            productRepository.save(map(dto));
+    private List<Product> map(List<ProductDto> source, Category category, Shop shop) {
+        return source.stream().map(this::map).peek(o -> {
+            o.setCategory(category);
+            o.getShops().add(shop);
+        }).collect(Collectors.toList());
     }
 
     private Product map(ProductDto source) {
@@ -70,11 +97,20 @@ public class ProductInit {
 
     private String getEan(String fullEan) {
         if (isNull(fullEan)) return null;
-        return fullEan.replaceAll(LETTER_PATTERN,"");
+        return fullEan.replaceAll(LETTER_PATTERN, "");
     }
 
     private Shop getShopByCategoryId(String fullIdentifier) {
         String[] all = fullIdentifier.split(DELIMITER);
         return Shop.getByIdentifier(all[all.length - 1]);
+    }
+
+    // todo remove kostil and add extra column to Category
+    private String getFullIdentifier(String shortIdentifier, Shop shop) {
+        String result = shortIdentifier + DELIMITER + shop.getIdentifier();
+        if ("pizza-and-breads".equals(shortIdentifier) && Shop.AUCHAN.equals(shop)) {
+            return result + DELIMITER + shop.getIdentifier();
+        }
+        return result;
     }
 }

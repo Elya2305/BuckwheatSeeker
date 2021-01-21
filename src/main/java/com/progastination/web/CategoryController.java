@@ -1,6 +1,9 @@
 package com.progastination.web;
 
 import com.progastination.dto.CategoryDto;
+import com.progastination.entity.Category;
+import com.progastination.entity.Shop;
+import com.progastination.repository.CategoryRepository;
 import com.progastination.service.CategoryService;
 import com.progastination.utils.pagination.PageDto;
 import lombok.AllArgsConstructor;
@@ -10,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.List;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/categories")
 public class CategoryController {
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping("/main")
     public PageDto<CategoryDto> mainCategories(@RequestParam(required = false) int page,
