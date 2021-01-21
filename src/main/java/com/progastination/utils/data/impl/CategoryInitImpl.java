@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -29,7 +30,11 @@ public class CategoryInitImpl implements InitDbService {
     public void init() {
         if (categoryRepository.count() == 0) {
             log.info("*starting to init categories*");
-            Arrays.stream(Shop.values()).forEach(shop -> categoryClient.categories(shop).forEach(this::mapAndSave));
+            List<String> categories = Category.ShopCategory.categoryIdentifiers();
+
+            Arrays.stream(Shop.values()).forEach(shop -> categoryClient.categories(shop)
+                    .stream().filter(o -> categories.contains(getIdentifier(o.getParentId())) ||
+                            categories.contains(getIdentifier(o.getId()))).forEach(this::mapAndSave));
             log.info("*ending to init categories*");
         }
     }
@@ -43,7 +48,6 @@ public class CategoryInitImpl implements InitDbService {
     public boolean isEmpty() {
         return categoryRepository.count() == 0;
     }
-
 
     private void mapAndSave(CategoryDto dto) {
         if (nonNull(dto) && identifierExists(dto.getId())) {
