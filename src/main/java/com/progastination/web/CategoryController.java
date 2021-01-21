@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
     private final CategoryService categoryService;
 
+
     @GetMapping("/main")
     public PageDto<CategoryDto> mainCategories(@RequestParam int page,
                                                @RequestParam int pageSize) {
