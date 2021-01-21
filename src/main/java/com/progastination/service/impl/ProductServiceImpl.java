@@ -27,6 +27,11 @@ public class ProductServiceImpl implements ProductService {
         return PageDto.of(result.getTotalElements(), page, map(result.getContent()));
     }
 
+    @Override
+    public PageDto<ProductDto> productsByCategoryAndShop(String category, String shopIdentifier, int page, int pageSize) {
+        return null;
+    }
+
     private List<ProductDto> map(List<Product> source) {
         return source.stream().map(this::map).collect(Collectors.toList());
     }
