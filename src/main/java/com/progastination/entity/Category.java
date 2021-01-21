@@ -4,7 +4,6 @@ import com.progastination.utils.converter.ShopConverter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 import java.util.HashSet;

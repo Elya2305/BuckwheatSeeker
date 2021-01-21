@@ -7,10 +7,12 @@ import lombok.Data;
 @Data
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ImgDto {
-
-    private String s150x150;
-    private String s200x200;
     private String s350x350;
-    private String s1350x1350;
 
+    public static ImgDto of(String s350x350) {
+        ImgDto imgDto = new ImgDto();
+        imgDto.setS350x350(s350x350);
+        return imgDto;
+    }
 }
+

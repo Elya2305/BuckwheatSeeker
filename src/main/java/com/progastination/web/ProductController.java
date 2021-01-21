@@ -1,25 +1,27 @@
 package com.progastination.web;
 
-import com.progastination.entity.Shop;
-import com.progastination.repository.ProductRepository;
-import com.progastination.utils.client.ProductClient;
+import com.progastination.dto.ProductDto;
+import com.progastination.service.ProductService;
+import com.progastination.utils.pagination.PageDto;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Set;
-
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
-    private final ProductClient productClient;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    @GetMapping
-    private List<Set<Shop>> all() {
-        return productRepository.getDistinctShops();
+    @GetMapping("/by-category")
+    public PageDto<ProductDto> mainCategories(@RequestParam String category,
+                                              @RequestParam int page,
+                                              @RequestParam int pageSize) {
+        log.info("Request on getting main categories");
+        return productService.productsByCategory(category, page, pageSize);
     }
 }
