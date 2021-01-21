@@ -1,15 +1,15 @@
-package com.progastination.utils.data;
+package com.progastination.utils.data.impl;
 
 import com.progastination.dto.CategoryDto;
 import com.progastination.entity.Category;
 import com.progastination.entity.Shop;
 import com.progastination.repository.CategoryRepository;
 import com.progastination.utils.client.CategoryClient;
+import com.progastination.utils.data.InitDbService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -17,25 +17,33 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Slf4j
-@Component
+@Service(value = CategoryInitImpl.CATEGORY_INITIALIZER)
 @AllArgsConstructor
-public class CategoryInit {
+public class CategoryInitImpl implements InitDbService {
+    public static final String CATEGORY_INITIALIZER = "CategoryInit";
     private final CategoryClient categoryClient;
     private final CategoryRepository categoryRepository;
     private final static String DELIMITER = "-";
 
-    @PostConstruct
+    @Override
     public void init() {
         if (categoryRepository.count() == 0) {
-            loadDb();
+            log.info("*starting to init categories*");
+            Arrays.stream(Shop.values()).forEach(shop -> categoryClient.categories(shop).forEach(this::mapAndSave));
+            log.info("*ending to init categories*");
         }
     }
 
-    public void loadDb() {
-        log.info("*starting to init categories*");
-        Arrays.stream(Shop.values()).forEach(shop -> categoryClient.categories(shop).forEach(this::mapAndSave));
-        log.info("*ending to init categories*");
+    @Override
+    public void clear() {
+        categoryRepository.deleteAll();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return categoryRepository.count() == 0;
+    }
+
 
     private void mapAndSave(CategoryDto dto) {
         if (nonNull(dto) && identifierExists(dto.getId())) {

@@ -1,4 +1,4 @@
-package com.progastination.utils.data;
+package com.progastination.utils.data.impl;
 
 import com.progastination.dto.ProductDto;
 import com.progastination.entity.Category;
@@ -6,10 +6,13 @@ import com.progastination.entity.Product;
 import com.progastination.entity.Shop;
 import com.progastination.repository.CategoryRepository;
 import com.progastination.repository.ProductRepository;
+import com.progastination.service.ProductService;
 import com.progastination.utils.client.ProductClient;
+import com.progastination.utils.data.InitDbService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -22,39 +25,21 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Slf4j
-@Component
+@Service(value = ProductInitImpl.PRODUCT_INITIALIZER)
 @AllArgsConstructor
-public class ProductInit {
+public class ProductInitImpl implements InitDbService {
+    public final static String PRODUCT_INITIALIZER = "ProductInit";
+    private final static String DELIMITER = "-";
+    private final static String LETTER_PATTERN = "[^\\d.]";
     private final ProductClient productClient;
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final static String DELIMITER = "-";
-    private final static String LETTER_PATTERN = "[^\\d.]";
-    private List<Shop> newShops;
 
-
-    @PostConstruct
+    @Override
     public void init() {
-        newShops = productRepository.getDistinctShops().stream()
-                .flatMap(Collection::stream).collect(Collectors.toList());
-        if (checkNewPresent()) {
-            loadDb();
-        }
-    }
-
-    private boolean checkNewPresent() {
-        return Arrays.stream(Shop.values()).anyMatch(o -> !newShops.contains(o));
-    }
-
-    private List<Shop> newShops() {
-        return Arrays.stream(Shop.values()).filter(o -> !newShops.contains(o))
-                .collect(Collectors.toList());
-    }
-
-    public void loadDb() {
         log.info("*starting to init products*");
         List<Category> categories = categoryRepository.findAll();
-        for (Shop shop : newShops()) {
+        for (Shop shop : Shop.values()) {
             for (Category category : categories) {
                 if (category.getShops().contains(shop)) {
                     List<ProductDto> results = productClient.products(getFullIdentifier(category.getIdentifier(), shop), shop).getResults();
@@ -64,6 +49,16 @@ public class ProductInit {
             }
         }
         log.info("*ending to init products*");
+    }
+
+    @Override
+    public void clear() {
+        productRepository.deleteAll();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return productRepository.count() == 0;
     }
 
     private List<Product> map(List<ProductDto> source, Category category, Shop shop) {

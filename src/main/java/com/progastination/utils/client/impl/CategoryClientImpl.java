@@ -5,14 +5,17 @@ import com.progastination.dto.ListCategoryDtoResponse;
 import com.progastination.entity.Shop;
 import com.progastination.utils.AbstractHttpClient;
 import com.progastination.utils.client.CategoryClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class CategoryClientImpl extends AbstractHttpClient implements CategoryClient {
     private final Map<Shop, String> shopUrls;
@@ -33,7 +36,12 @@ public class CategoryClientImpl extends AbstractHttpClient implements CategoryCl
 
     @Override
     public List<CategoryDto> categories(Shop shop) {
-        return get(shopUrls.get(shop), ListCategoryDtoResponse.class);
+        try {
+            return get(shopUrls.get(shop), ListCategoryDtoResponse.class);
+        }catch (RuntimeException e) {
+            log.error("error while getting category by url {}", shopUrls.get(shop));
+            return Collections.emptyList();
+        }
     }
 
     @Override

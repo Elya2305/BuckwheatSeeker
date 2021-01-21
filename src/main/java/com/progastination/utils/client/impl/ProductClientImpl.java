@@ -4,13 +4,16 @@ import com.progastination.dto.ProductResponseDto;
 import com.progastination.entity.Shop;
 import com.progastination.utils.AbstractHttpClient;
 import com.progastination.utils.client.ProductClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class ProductClientImpl extends AbstractHttpClient implements ProductClient {
     private final Map<Shop, String> productUrls;
@@ -31,7 +34,12 @@ public class ProductClientImpl extends AbstractHttpClient implements ProductClie
 
     @Override
     public ProductResponseDto products(String category, Shop shop) {
-        return get(url(category, shop), ProductResponseDto.class);
+        try {
+            return get(url(category, shop), ProductResponseDto.class);
+        } catch (RuntimeException e) {
+            log.error("error while getting product by url {}", url(category, shop));
+            return emptyResponse();
+        }
     }
 
     @Override
@@ -43,5 +51,11 @@ public class ProductClientImpl extends AbstractHttpClient implements ProductClie
 
     private String url(String category, Shop shop) {
         return productUrls.get(shop).replace("[category]", category);
+    }
+
+    private ProductResponseDto emptyResponse() {
+        ProductResponseDto response = new ProductResponseDto();
+        response.setResults(Collections.emptyList());
+        return response;
     }
 }
