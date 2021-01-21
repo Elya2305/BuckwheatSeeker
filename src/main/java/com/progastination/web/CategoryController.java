@@ -18,16 +18,16 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/main")
-    public PageDto<CategoryDto> mainCategories(@RequestParam(required = false) Integer page,
-                                               @RequestParam(required = false) Integer pageSize) {
+    public PageDto<CategoryDto> mainCategories(@RequestParam int page,
+                                               @RequestParam int pageSize) {
         log.info("Request on getting main categories");
         return categoryService.mainCategories(page, pageSize);
     }
 
     @GetMapping("/sub-categories")
     public PageDto<CategoryDto> subCategories(@RequestParam String identifier,
-                                           @RequestParam(required = false) Integer page,
-                                           @RequestParam(required = false) Integer pageSize) {
+                                           @RequestParam int page,
+                                           @RequestParam int pageSize) {
         log.info("Request on getting sub categories by identifier {}", identifier);
         return categoryService.subCategories(identifier, page, pageSize);
     }
