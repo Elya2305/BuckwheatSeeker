@@ -1,7 +1,7 @@
 package com.progastination.utils.client.impl;
 
 import com.progastination.dto.CategoryDto;
-import com.progastination.dto.ListDtoResponse;
+import com.progastination.dto.ListCategoryDtoResponse;
 import com.progastination.entity.Shop;
 import com.progastination.utils.AbstractHttpClient;
 import com.progastination.utils.client.CategoryClient;
@@ -34,7 +34,7 @@ public class CategoryClientImpl extends AbstractHttpClient implements CategoryCl
 
     @Override
     public List<CategoryDto> categories(Shop shop) {
-        return get(shopUrls.get(shop), ListDtoResponse.class);
+        return get(shopUrls.get(shop), ListCategoryDtoResponse.class);
     }
 
     @Override

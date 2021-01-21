@@ -19,7 +19,7 @@ import static java.util.Objects.nonNull;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class ProductSaveToDb {
+public class ProductInit {
     private final ProductClient productClient;
     private final ProductRepository productRepository;
     private final static String DELIMITER = "-";
