@@ -5,12 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.catalina.Store;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Table(name = "categories")
@@ -49,8 +47,13 @@ public class Category {
         MEAT_FISH_POULTRY("meat-fish-poultry"),
         FROZEN("frozen"),
         DRINKS("drinks"),
-//        GROCERY("grocery"),
-        GROCERY_AND_SWEETS("grocery-and-sweets");
+        GROCERY("grocery"),
+        PACKETS_CEREALS_METRO("packets-cereals") {
+            @Override
+            public List<Shop> availableStore() {
+                return Collections.singletonList(Shop.METRO);
+            }
+        };
 
 
         @Getter
@@ -64,6 +67,10 @@ public class Category {
             return Arrays.stream(ShopCategory.values())
                     .map(ShopCategory::getIdentifier)
                     .collect(Collectors.toList());
+        }
+
+        public List<Shop> availableStore() {
+            return Arrays.asList(Shop.values());
         }
     }
 }
