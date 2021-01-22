@@ -23,7 +23,8 @@ public class LoadDatabase {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * *") // 12:00
+    //    @Scheduled(cron = "0 0 0 * * *") // 12:00
+    @Scheduled(cron = "0 45 08 * * ?") // 08:45
     public void loadDb() {
         log.info("Starting to update data...");
         productInit.clear();
