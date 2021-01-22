@@ -17,10 +17,6 @@ public class LoadDatabase {
                         @Qualifier(value = ProductInitImpl.PRODUCT_INITIALIZER) InitDbService productInit) {
         this.categoryInit = categoryInit;
         this.productInit = productInit;
-
-        if (productInit.isEmpty()) {
-            loadDb();
-        }
     }
 
     //    @Scheduled(cron = "0 0 0 * * *") // 12:00
