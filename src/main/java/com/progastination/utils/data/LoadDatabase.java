@@ -22,7 +22,6 @@ public class LoadDatabase {
     }
 
     @Scheduled(cron = "0 0 0 * * *") // 12:00
-    @EventListener(ApplicationReadyEvent.class)
     public void loadDb() {
         log.info("Starting to update data...");
         productInit.clear();
@@ -31,5 +30,12 @@ public class LoadDatabase {
         categoryInit.init();
         productInit.init();
         log.info("Ending to update data...");
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void firstInit() {
+        if (productInit.isEmpty() || categoryInit.isEmpty()) {
+            loadDb();
+        }
     }
 }
