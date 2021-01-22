@@ -33,9 +33,9 @@ public class ProductController {
 
     @GetMapping("/by-category/shop")
     public PageDto<ProductDto> byCategoryAndShop(@RequestParam String category,
-                                      @RequestParam Shop shop,
-                                              @RequestParam int page,
-                                              @RequestParam int pageSize) {
+                                                 @RequestParam Shop shop,
+                                                 @RequestParam int page,
+                                                 @RequestParam int pageSize) {
         log.info("Request on getting products by category and shop");
         return productService.productsByCategoryAndShop(category, shop.getName(), page, pageSize);
     }

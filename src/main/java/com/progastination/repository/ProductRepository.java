@@ -18,9 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, String>, Pagin
 
     Optional<Product> findByEan(String ean);
 
-    @Query(value = "select p from Product p where p.category.identifier=:category")
+    @Query(value = "select p from Product p where p.category.identifier=:category order by p.price asc")
     Page<Product> findAllByCategory(@Param("category") String category, Pageable pageable);
 
-    @Query(value = "select p from Product p where p.category.identifier=:category and p.shop=:shop")
+    @Query(value = "select p from Product p where p.category.identifier=:category and p.shop=:shop order by p.price asc ")
     Page<Product> findAllByCategoryAndShop(String category, String shop, Pageable pageableUnsorted);
 }
