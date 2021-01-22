@@ -72,6 +72,7 @@ public class ProductInitImpl implements InitDbService {
         destination.setTitle(source.getTitle());
         destination.setWebUrl(source.getWebUrl());
         destination.setWeight(source.getWeight());
+        destination.setProducer(source.getProducer());
         destination.setShop(getShopByCategoryId(source.getCategoryId()).getName());
         return destination;
     }
