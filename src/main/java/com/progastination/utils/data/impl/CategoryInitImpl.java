@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+// todo change to update
 @Slf4j
 @Service(value = CategoryInitImpl.CATEGORY_INITIALIZER)
 @AllArgsConstructor

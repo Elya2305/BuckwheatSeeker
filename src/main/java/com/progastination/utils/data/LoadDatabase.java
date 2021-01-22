@@ -4,6 +4,8 @@ import com.progastination.utils.data.impl.CategoryInitImpl;
 import com.progastination.utils.data.impl.ProductInitImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +21,8 @@ public class LoadDatabase {
         this.productInit = productInit;
     }
 
-    //    @Scheduled(cron = "0 0 0 * * *") // 12:00
-    @Scheduled(cron = "0 55 08 * * ?") // 08:45
+    @Scheduled(cron = "0 0 0 * * *") // 12:00
+    @EventListener(ApplicationReadyEvent.class)
     public void loadDb() {
         log.info("Starting to update data...");
         productInit.clear();
