@@ -6,24 +6,19 @@ import com.progastination.entity.Product;
 import com.progastination.entity.Shop;
 import com.progastination.repository.CategoryRepository;
 import com.progastination.repository.ProductRepository;
-import com.progastination.service.ProductService;
 import com.progastination.utils.client.ProductClient;
 import com.progastination.utils.data.InitDbService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
+// todo save producer
 @Slf4j
 @Service(value = ProductInitImpl.PRODUCT_INITIALIZER)
 @AllArgsConstructor

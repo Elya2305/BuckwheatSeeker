@@ -1,7 +1,10 @@
 package com.progastination.web;
 
+import com.progastination.dto.ProducerDto;
 import com.progastination.dto.ProductDto;
+import com.progastination.entity.Product;
 import com.progastination.entity.Shop;
+import com.progastination.repository.ProductRepository;
 import com.progastination.service.ProductService;
 import com.progastination.utils.pagination.PageDto;
 import lombok.AllArgsConstructor;

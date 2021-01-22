@@ -14,4 +14,6 @@ public class ProductDto {
     private String title;
     private String webUrl;
     private Integer weight;
+    private String unit;
+    private ProducerDto producer;
 }

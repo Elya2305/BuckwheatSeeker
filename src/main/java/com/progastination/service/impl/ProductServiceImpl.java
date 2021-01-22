@@ -1,9 +1,7 @@
 package com.progastination.service.impl;
 
-import com.progastination.dto.CategoryDto;
 import com.progastination.dto.ImgDto;
 import com.progastination.dto.ProductDto;
-import com.progastination.entity.Category;
 import com.progastination.entity.Product;
 import com.progastination.repository.ProductRepository;
 import com.progastination.service.ProductService;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// todo save producer -> ProductInitImpl
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
