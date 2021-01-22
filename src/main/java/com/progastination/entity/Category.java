@@ -49,7 +49,9 @@ public class Category {
         MEAT_FISH_POULTRY("meat-fish-poultry"),
         FROZEN("frozen"),
         DRINKS("drinks"),
-        GROCERY("grocery");
+//        GROCERY("grocery"),
+        GROCERY_AND_SWEETS("grocery-and-sweets");
+
 
         @Getter
         private final String identifier;
