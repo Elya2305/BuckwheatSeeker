@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -25,16 +27,16 @@ public class ProductController {
     public PageDto<ProductDto> byCategory(@RequestParam String category,
                                               @RequestParam int page,
                                               @RequestParam int pageSize) {
-        log.info("Request on getting products by categories");
+        log.info("Request on getting products by category");
         return productService.productsByCategory(category, page, pageSize);
     }
 
     @GetMapping("/by-category/shop")
-    public PageDto<ProductDto> byShop(@RequestParam String category,
-                                      @RequestParam String shopIdentifier,
+    public PageDto<ProductDto> byCategoryAndShop(@RequestParam String category,
+                                      @RequestParam Shop shop,
                                               @RequestParam int page,
                                               @RequestParam int pageSize) {
-        log.info("Request on getting main categories");
-        return productService.productsByCategoryAndShop(category, shopIdentifier, page, pageSize);
+        log.info("Request on getting products by category and shop");
+        return productService.productsByCategoryAndShop(category, shop.getName(), page, pageSize);
     }
 }

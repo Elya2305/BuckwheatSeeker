@@ -3,6 +3,7 @@ package com.progastination.service.impl;
 import com.progastination.dto.ImgDto;
 import com.progastination.dto.ProductDto;
 import com.progastination.entity.Product;
+import com.progastination.entity.Shop;
 import com.progastination.repository.ProductRepository;
 import com.progastination.service.ProductService;
 import com.progastination.utils.pagination.PageDto;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 // todo save producer -> ProductInitImpl
@@ -27,8 +29,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageDto<ProductDto> productsByCategoryAndShop(String category, String shopIdentifier, int page, int pageSize) {
-        return null;
+    public PageDto<ProductDto> productsByCategoryAndShop(String category, String shop, int page, int pageSize) {
+        Page<Product> result = productRepository.findAllByCategoryAndShop(category, shop, PagesUtility.createPageableUnsorted(page, pageSize));
+        return PageDto.of(result.getTotalElements(), page, map(result.getContent()));
     }
 
     private List<ProductDto> map(List<Product> source) {

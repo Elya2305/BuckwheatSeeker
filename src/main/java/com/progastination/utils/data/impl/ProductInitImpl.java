@@ -59,7 +59,7 @@ public class ProductInitImpl implements InitDbService {
     private List<Product> map(List<ProductDto> source, Category category, Shop shop) {
         return source.stream().map(this::map).peek(o -> {
             o.setCategory(category);
-            o.getShops().add(shop);
+            o.setShop(shop.getName());
         }).collect(Collectors.toList());
     }
 
@@ -72,7 +72,7 @@ public class ProductInitImpl implements InitDbService {
         destination.setTitle(source.getTitle());
         destination.setWebUrl(source.getWebUrl());
         destination.setWeight(source.getWeight());
-        destination.addShop(getShopByCategoryId(source.getCategoryId()));
+        destination.setShop(getShopByCategoryId(source.getCategoryId()).getName());
         return destination;
     }
 

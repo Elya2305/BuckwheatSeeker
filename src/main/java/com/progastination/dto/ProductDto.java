@@ -2,6 +2,7 @@ package com.progastination.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.progastination.entity.Shop;
 import lombok.Data;
 
 @Data
@@ -16,4 +17,5 @@ public class ProductDto {
     private Integer weight;
     private String unit;
     private ProducerDto producer;
+    private Shop shop;
 }

@@ -31,15 +31,9 @@ public class Product {
     @ManyToOne
     private Category category; // parentCategoryId
 
-    @Column(columnDefinition = "TEXT")
-    @Convert(converter = ShopConverter.class)
-    private Set<Shop> shops = new HashSet<>();
+    private String shop;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private ProducerDto producer;
-
-    public void addShop(Shop shop) {
-        this.shops.add(shop);
-    }
 }
