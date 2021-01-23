@@ -1,6 +1,6 @@
 package com.progastination.web;
 
-import com.progastination.dto.CategoryDto;
+import com.progastination.dto.CategoryImprovedDto;
 import com.progastination.service.CategoryService;
 import com.progastination.utils.pagination.PageDto;
 import lombok.AllArgsConstructor;
@@ -19,14 +19,14 @@ public class CategoryController {
 
 
     @GetMapping("/main")
-    public PageDto<CategoryDto> mainCategories(@RequestParam int page,
-                                               @RequestParam int pageSize) {
+    public PageDto<CategoryImprovedDto> mainCategories(@RequestParam int page,
+                                                       @RequestParam int pageSize) {
         log.info("Request on getting main categories");
         return categoryService.mainCategories(page, pageSize);
     }
 
     @GetMapping("/sub-categories")
-    public PageDto<CategoryDto> subCategories(@RequestParam String identifier,
+    public PageDto<CategoryImprovedDto> subCategories(@RequestParam String identifier,
                                            @RequestParam int page,
                                            @RequestParam int pageSize) {
         log.info("Request on getting sub categories by identifier {}", identifier);

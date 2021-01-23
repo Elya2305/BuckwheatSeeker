@@ -1,11 +1,14 @@
 package com.progastination.entity;
 
 import com.progastination.utils.converter.ShopConverter;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.apache.catalina.Store;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import java.util.*;
@@ -52,6 +55,12 @@ public class Category {
             @Override
             public List<Shop> availableStore() {
                 return Collections.singletonList(Shop.METRO);
+            }
+        },
+        PULSES_AND_GRAIN("pulses-and-grain") {
+            @Override
+            public List<Shop> availableStore() {
+                return Collections.singletonList(Shop.AUCHAN);
             }
         };
 

@@ -1,7 +1,7 @@
 package com.progastination.repository;
 
 import com.progastination.entity.Category;
-import com.progastination.entity.Shop;
+import com.progastination.entity.projection.CategoryProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,15 +11,31 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+/**
+* @author Elya
+* */
 
 public interface CategoryRepository extends JpaRepository<Category, String>, PagingAndSortingRepository<Category, String> {
 
     Optional<Category> findByIdentifier(String identifier);
 
-    Page<Category> findAllByCategoryIsNull(Pageable pageable);
+    /**
+    * find subcategories of one category
+    * */
+    @Query(value = "select string_agg(identifier, ',') as identifiers, sum(count) as totalCount, title, max(image) as image, string_agg(shops, ',') as shops,string_agg(category_identifier, ',')" +
+            "  from categories where category_identifier =:parentIdentifier  group by title", nativeQuery = true)
+    Page<CategoryProjection> findSubCategories(@Param("parentIdentifier") String parentIdentifier, Pageable pageable);
 
-    @Query("select c from Category c where c.category.identifier=:parentIdentifier")
-    Page<Category> findSubCategories(@Param("parentIdentifier") String parentIdentifier, Pageable pageable);
+    /**
+    * count total subcategories of category
+    * */
+    @Query("select count (c) from Category c where c.category.identifier in (:parentIdentifier)")
+    int countChildren(@Param("parentIdentifier") List<String> identifier);
 
+    /**
+    * group categories by title
+    * */
+    @Query(value = "select string_agg(identifier, ',') as identifiers, sum(count) as totalCount, title, max(image) as image, string_agg(shops, ',') as shops,string_agg(category_identifier, ',')" +
+            "  from categories where category_identifier is null group by title", nativeQuery = true)
+    Page<CategoryProjection> mainCategories(Pageable pageable);
 }
