@@ -1,8 +1,6 @@
 package com.progastination.service.impl;
 
-import com.progastination.dto.CategoryDto;
 import com.progastination.dto.CategoryImprovedDto;
-import com.progastination.entity.Category;
 import com.progastination.entity.projection.CategoryProjection;
 import com.progastination.repository.CategoryRepository;
 import com.progastination.service.CategoryService;

@@ -13,10 +13,11 @@ import static java.util.Objects.nonNull;
 
 /**
  * 23.01.21
+ *
  * @author Elya
- *
+ * <p>
  * v1.0
- *
+ * <p>
  * available where conditions with operations equals/like/in, joined with the same condition (wait for improvements soon)
  */
 
@@ -48,7 +49,6 @@ public class SelectBuilder {
         where.put(condition, columns);
         return this;
     }
-
 
 
     public SelectBuilder limit(Integer limit) {
@@ -87,9 +87,9 @@ public class SelectBuilder {
     }
 
     /**
-    *   -> v1.0
-    *  join columns with the same condition, then join 'joined' columns
-    * */
+     * -> v1.0
+     * join columns with the same condition, then join 'joined' columns
+     */
     private String buildWhere() {
         return this.where.entrySet().stream().map(entry -> entry.getValue().stream().map(o ->
                 String.format(entry.getKey().pattern, o.getFiled(), convertValues(o.getValue())))

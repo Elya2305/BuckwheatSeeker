@@ -3,18 +3,13 @@ package com.progastination.web;
 import com.progastination.dto.ProductChartDto;
 import com.progastination.dto.ProductDto;
 import com.progastination.dto.ProductFilterDto;
-import com.progastination.entity.Product;
 import com.progastination.entity.Shop;
 import com.progastination.service.ProductChartService;
 import com.progastination.service.ProductService;
-import com.progastination.service.impl.ProductFilterServiceImpl;
 import com.progastination.utils.pagination.PageDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,7 +18,6 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
     private final ProductChartService productChartService;
-    private final ProductFilterServiceImpl productFilterService;
 
     @GetMapping("/by-category")
     public PageDto<ProductDto> byCategory(@RequestParam String category,
@@ -63,5 +57,4 @@ public class ProductController {
         log.info("Request on getting products by filter - {}", filter);
         return productService.productsByFilter(filter, page, pageSize);
     }
-
 }

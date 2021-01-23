@@ -12,13 +12,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 // todo add title or producer after improving select builder
+
 /**
-* 23.01.21
-* @author Elya
-*
-* service that filters data without iterating over different combinations of nonnull filter parameters
-* @see com.progastination.utils.select.SelectBuilder
-* */
+ * 23.01.21
+ *
+ * @author Elya
+ * <p>
+ * service that filters data without iterating over different combinations of nonnull filter parameters
+ * @see com.progastination.utils.select.SelectBuilder
+ */
 
 @Component
 @AllArgsConstructor
@@ -68,6 +70,6 @@ public class ProductFilterServiceImpl implements ProductFilterService {
         public final static String SHOP = "shop";
         public final static String TITLE = "title";
         public final static String WEB_URL = "web_url";
-        public final static String PARENT_CATEGORY_ID  = "category_identifier";
+        public final static String PARENT_CATEGORY_ID = "category_identifier";
     }
 }

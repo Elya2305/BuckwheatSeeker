@@ -49,12 +49,12 @@ public class ProductChartServiceImpl implements ProductChartService {
                     .forEach(e -> {
                         keys.add(e.text());
                     });
-            Map<String, Double> chart = IntStream.range(0,keys.size())
+            Map<String, Double> chart = IntStream.range(0, keys.size())
                     .boxed()
-                    .collect(Collectors.toMap(keys::get,values::get));
+                    .collect(Collectors.toMap(keys::get, values::get));
             productChartDto.getValues().putAll(chart);
             return productChartDto;
-        }catch (IOException e) {
+        } catch (IOException e) {
             log.error("Parse html has an error by url: {}", CHART_URL);
             throw new RuntimeException(String.format("Jsoup connection failed for url: %s", CHART_URL));
         }
