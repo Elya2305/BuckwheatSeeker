@@ -10,8 +10,13 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.*;
 
-// todo you can know only statistics for one product?
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -22,27 +27,32 @@ public class ProductChartServiceImpl implements ProductChartService {
     private static final String ELEMENT_VALUE_CENTER = "center";
     private static final String COMA = ",";
     private static final String DOT = ".";
+    private static final Byte SKIP_NO_CHART_VALUES = 12;
+    private static final Byte SKIP_NO_CHART_DATES = 6;
+    private static final Byte LENGTH_OF_WEEKDAY = 2;
 
-
-    // todo refactor, make an object:
-    //  [{
-    //      "date" : ...
-    //       "value" : ...
-    //  }, ...]
     @Override
     public ProductChartDto getProductChart() {
         ProductChartDto productChartDto = new ProductChartDto();
+        List<Double> values = new ArrayList<>();
+        List<String> keys = new ArrayList<>();
+
         try {
             Document document = Jsoup.connect(CHART_URL).get();
-            Elements values = document.getElementsByAttributeValueContaining(ELEMENT_KEY_ALIGN, ELEMENT_VALUE_RIGHT);
+            Elements prices = document.getElementsByAttributeValueContaining(ELEMENT_KEY_ALIGN, ELEMENT_VALUE_RIGHT);
             Elements dates = document.getElementsByAttributeValueContaining(ELEMENT_KEY_ALIGN, ELEMENT_VALUE_CENTER);
-            values.stream().skip(12).forEach(e -> productChartDto.getValues().add(Double.valueOf(e.text().replace(COMA, DOT)))); // todo 12 what? Is it a kostilchik?
+
+            prices.stream().skip(SKIP_NO_CHART_VALUES).forEach(e -> values.add(Double.valueOf(e.text().replace(COMA, DOT))));
             dates.stream()
-                    .skip(6) // todo the same about 6
-                    .filter(element -> element.text().length() > 2)
+                    .skip(SKIP_NO_CHART_DATES)
+                    .filter(element -> element.text().length() > LENGTH_OF_WEEKDAY)
                     .forEach(e -> {
-                        productChartDto.getDates().add(e.text());
+                        keys.add(e.text());
                     });
+            Map<String, Double> chart = IntStream.range(0,keys.size())
+                    .boxed()
+                    .collect(Collectors.toMap(keys::get,values::get));
+            productChartDto.getValues().putAll(chart);
             return productChartDto;
         }catch (IOException e) {
             log.error("");// todo
@@ -50,5 +60,4 @@ public class ProductChartServiceImpl implements ProductChartService {
 
         }
     }
-    // todo btw did you notice how much time it takes to run this code? Lot's of seconds...
 }

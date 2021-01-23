@@ -2,7 +2,6 @@ package com.progastination.web;
 
 import com.progastination.dto.ProductChartDto;
 import com.progastination.dto.ProductDto;
-import com.progastination.dto.ProductFilterDto;
 import com.progastination.entity.Shop;
 import com.progastination.service.ProductChartService;
 import com.progastination.service.ProductService;
