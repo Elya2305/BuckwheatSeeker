@@ -28,6 +28,7 @@ public class SelectBuilder {
     private String offset;
     private JoinCondition joinCondition;
     private Map<SelectCondition, List<Column>> where = new HashMap<>();
+    private Map<String, SortPrice> sort = new HashMap<>();
 
     public SelectBuilder table(String table) {
         this.table = table;
@@ -68,6 +69,12 @@ public class SelectBuilder {
         return this;
     }
 
+    public SelectBuilder orderBy(String field, SortPrice sort) {
+        if (isNull(field) || isNull(sort)) return this;
+        this.sort.put(field, sort);
+        return this;
+    }
+
     public String build() {
         checkBuild();
         StringBuilder select = new StringBuilder();
@@ -82,6 +89,9 @@ public class SelectBuilder {
         }
         if (nonNull(offset)) {
             select.append(" OFFSET ").append(offset);
+        }
+        if (!sort.isEmpty()) {
+//            select.append(" ORDER BY " + sort.get())
         }
         return select.toString();
     }

@@ -3,6 +3,7 @@ package com.progastination.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.progastination.dto.*;
+import com.progastination.entity.Shop;
 import com.progastination.service.ProductFilterService;
 import com.progastination.utils.select.SelectBuilder;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.nonNull;
 // todo add title or producer after improving select builder
 
 /**
@@ -45,6 +49,7 @@ public class ProductFilterServiceImpl implements ProductFilterService {
                 .limit(pageSize)
                 .offset(page * pageSize)
                 .condition(SelectBuilder.JoinCondition.AND)
+//                .sort(ProductTableConstant.TITLE, filter.getSortPrice())
                 .build();
 
         return jdbcTemplate.query(select, rowMapper());
@@ -65,9 +70,13 @@ public class ProductFilterServiceImpl implements ProductFilterService {
         };
     }
 
-    private Map<String, Integer> mapPrice(String value) {
+    private Map<Shop, Integer> mapPrice(String value) {
         try {
-            return mapper.readValue(value, MapGenerified.class);
+            Map<String, Integer> map = mapper.readValue(value, MapGenerified.class);
+            if (nonNull(map)) {
+                return map.entrySet().stream().collect(Collectors.toMap(o -> Shop.valueOf(o.getKey()), Map.Entry::getValue));
+            }
+            return Collections.emptyMap();
         } catch (JsonProcessingException e) {
             log.error("Error while converting jsonb to map ", e);
             return Collections.emptyMap();

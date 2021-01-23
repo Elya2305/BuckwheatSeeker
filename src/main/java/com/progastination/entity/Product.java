@@ -1,6 +1,7 @@
 package com.progastination.entity;
 
 import com.progastination.dto.ProducerDto;
+import com.progastination.dto.ShopPriceDto;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,9 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // todo add unit
@@ -31,12 +34,21 @@ public class Product {
     @ManyToOne
     private Category category; // parentCategoryId
 
-    @MapKeyEnumerated(EnumType.STRING)
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private Map<Shop, Integer> prices = new HashMap<>();
+    private List<ShopPriceDto> prices = new ArrayList<>();
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private ProducerDto producer;
+
+    public ShopPriceDto getOrCreatePriceByShop(Shop shop) {
+        ShopPriceDto shopPrice = prices.stream().filter(o -> shop.equals(o.getShop())).findFirst().orElse(new ShopPriceDto());
+        shopPrice.setShop(shop);
+        return shopPrice;
+    }
+
+    public void addPrice(ShopPriceDto price) {
+        this.prices.add(price);
+    }
 }

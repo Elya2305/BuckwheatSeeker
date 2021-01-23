@@ -45,18 +45,11 @@ public class ProductServiceImpl implements ProductService {
         destination.setCategoryId(source.getCategoryId());
         destination.setEan(source.getEan());
         destination.setImg(ImgDto.of(source.getImage()));
-        destination.setPrices(map(source.getPrices()));
+//        destination.setPrices(source.getPrices());
         destination.setWebUrl(source.getWebUrl());
         destination.setTitle(source.getTitle());
         destination.setWeight(source.getWeight());
         destination.setUnit(source.getUnit());
         return destination;
-    }
-
-    private Map<String, Integer> map(Map<Shop, Integer> map) {
-        return map.entrySet().stream().collect(Collectors.toMap(
-                o -> o.getKey().name(),
-                Map.Entry::getValue
-        ));
     }
 }
