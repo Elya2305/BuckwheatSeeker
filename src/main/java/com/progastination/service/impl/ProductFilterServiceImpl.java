@@ -1,16 +1,21 @@
 package com.progastination.service.impl;
 
-import com.progastination.dto.ProductDto;
-import com.progastination.dto.ProductFilterDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.progastination.dto.*;
 import com.progastination.service.ProductFilterService;
 import com.progastination.utils.select.SelectBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.postgresql.util.PGobject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 // todo add title or producer after improving select builder
 
 /**
@@ -22,10 +27,12 @@ import java.util.List;
  * @see com.progastination.utils.select.SelectBuilder
  */
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class ProductFilterServiceImpl implements ProductFilterService {
     private final JdbcTemplate jdbcTemplate;
+    private final ObjectMapper mapper;
 
     @Override
     public List<ProductDto> filterProducts(ProductFilterDto filter, int page, int pageSize) {
@@ -33,7 +40,7 @@ public class ProductFilterServiceImpl implements ProductFilterService {
         String select = selectBuilder
                 .table(ProductTableConstant.TABLE_NAME)
                 .where(ProductTableConstant.WEIGHT, filter.getWeights(), SelectBuilder.SelectCondition.IN)
-                .where(ProductTableConstant.CATEGORY_ID, filter.getCategoryIdentifiers(), SelectBuilder.SelectCondition.IN)
+                .where(ProductTableConstant.CATEGORY_ID, filter.getCategories(), SelectBuilder.SelectCondition.IN)
                 .where(ProductTableConstant.TITLE, filter.getSearch(), SelectBuilder.SelectCondition.LIKE)
                 .limit(pageSize)
                 .offset(page * pageSize)
@@ -43,7 +50,6 @@ public class ProductFilterServiceImpl implements ProductFilterService {
         return jdbcTemplate.query(select, rowMapper());
     }
 
-    // todo set fields (i'm too lazy)
     private RowMapper<ProductDto> rowMapper() {
         return (rs, i) -> {
             ProductDto product = new ProductDto();
@@ -51,12 +57,30 @@ public class ProductFilterServiceImpl implements ProductFilterService {
             product.setWeight(rs.getInt(rs.findColumn(ProductTableConstant.WEIGHT)));
             product.setTitle(rs.getString(rs.findColumn(ProductTableConstant.TITLE)));
             product.setCategoryId(rs.getString(rs.findColumn(ProductTableConstant.CATEGORY_ID)));
-//            product.setShop();
-//            product.setUnit();
+            product.setImg(ImgDto.of(rs.getString(rs.findColumn(ProductTableConstant.IMAGE))));
+            product.setPrices(mapPrice(((PGobject) rs.getObject(rs.findColumn(ProductTableConstant.PRICE))).getValue()));
+            product.setProducer(mapProducer(((PGobject) rs.getObject(rs.findColumn(ProductTableConstant.PRODUCER))).getValue()));
             product.setWebUrl(rs.getString(rs.findColumn(ProductTableConstant.WEB_URL)));
-            product.setPrice(rs.getInt(rs.findColumn(ProductTableConstant.PRICE)));
             return product;
         };
+    }
+
+    private Map<String, Integer> mapPrice(String value) {
+        try {
+            return mapper.readValue(value, MapGenerified.class);
+        } catch (JsonProcessingException e) {
+            log.error("Error while converting jsonb to map ", e);
+            return Collections.emptyMap();
+        }
+    }
+
+    private ProducerDto mapProducer(String value) {
+        try {
+            return mapper.readValue(value, ProducerDto.class);
+        } catch (JsonProcessingException e) {
+            log.error("Error while converting jsonb to map ", e);
+            return null;
+        }
     }
 
     @Data
@@ -66,10 +90,11 @@ public class ProductFilterServiceImpl implements ProductFilterService {
         public final static String WEIGHT = "weight";
         public final static String CATEGORY_ID = "category_id";
         public final static String IMAGE = "image";
-        public final static String PRICE = "price";
+        public final static String PRICE = "prices";
         public final static String SHOP = "shop";
         public final static String TITLE = "title";
         public final static String WEB_URL = "web_url";
+        public final static String PRODUCER = "producer";
         public final static String PARENT_CATEGORY_ID = "category_identifier";
     }
 }

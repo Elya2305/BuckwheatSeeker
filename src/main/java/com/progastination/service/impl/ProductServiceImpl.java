@@ -12,34 +12,17 @@ import com.progastination.utils.pagination.PageDto;
 import com.progastination.utils.pagination.PagesUtility;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-
-// todo save producer -> ProductInitImpl
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductFilterService productFilterService;
-
-    @Override
-    public PageDto<ProductDto> productsByCategory(String category, int page, int pageSize) {
-        Page<Product> result = productRepository.findAllByCategory(category, PagesUtility.createPageableUnsorted(page, pageSize));
-        return PageDto.of(result.getTotalElements(), page, map(result.getContent()));
-    }
-
-    @Override
-    public PageDto<ProductDto> productsByCategoryAndShop(String category, String shop, int page, int pageSize) {
-        Page<Product> result = productRepository.findAllByCategoryAndShop(category, shop, PagesUtility.createPageableUnsorted(page, pageSize));
-        return PageDto.of(result.getTotalElements(), page, map(result.getContent()));
-    }
 
     @Override
     public PageDto<ProductDto> productsBySearch(String search, int page, int pageSize) {
@@ -62,10 +45,17 @@ public class ProductServiceImpl implements ProductService {
         destination.setCategoryId(source.getCategoryId());
         destination.setEan(source.getEan());
         destination.setImg(ImgDto.of(source.getImage()));
-        destination.setPrice(source.getPrice());
+        destination.setPrices(map(source.getPrices()));
         destination.setWebUrl(source.getWebUrl());
         destination.setTitle(source.getTitle());
         destination.setWeight(source.getWeight());
         return destination;
+    }
+
+    private Map<String, Integer> map(Map<Shop, Integer> map) {
+        return map.entrySet().stream().collect(Collectors.toMap(
+                o -> o.getKey().name(),
+                Map.Entry::getValue
+        ));
     }
 }

@@ -24,9 +24,6 @@ public class LoadDatabase {
     @Scheduled(cron = "0 0 0 * * *") // 12:00
     public void loadDb() {
         log.info("Starting to update data...");
-        productInit.clear();
-        categoryInit.clear();
-
         categoryInit.init();
         productInit.init();
         log.info("Ending to update data...");

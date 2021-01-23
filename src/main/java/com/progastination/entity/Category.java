@@ -57,13 +57,12 @@ public class Category {
                 return Collections.singletonList(Shop.METRO);
             }
         },
-        PULSES_AND_GRAIN("pulses-and-grain") {
+        GROCERY_AND_SWEETS("grocery-and-sweets") {
             @Override
             public List<Shop> availableStore() {
                 return Collections.singletonList(Shop.AUCHAN);
             }
         };
-
 
         @Getter
         private final String identifier;

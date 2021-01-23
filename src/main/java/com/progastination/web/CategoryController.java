@@ -1,14 +1,12 @@
 package com.progastination.web;
 
+import com.progastination.dto.CategoryIdentifiersDto;
 import com.progastination.dto.CategoryImprovedDto;
 import com.progastination.service.CategoryService;
 import com.progastination.utils.pagination.PageDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -25,11 +23,11 @@ public class CategoryController {
         return categoryService.mainCategories(page, pageSize);
     }
 
-    @GetMapping("/sub-categories")
-    public PageDto<CategoryImprovedDto> subCategories(@RequestParam String identifier,
-                                           @RequestParam int page,
-                                           @RequestParam int pageSize) {
-        log.info("Request on getting sub categories by identifier {}", identifier);
-        return categoryService.subCategories(identifier, page, pageSize);
+    @PostMapping("/sub-categories")
+    public PageDto<CategoryImprovedDto> subCategories(@RequestBody CategoryIdentifiersDto categories,
+                                                      @RequestParam int page,
+                                                      @RequestParam int pageSize) {
+        log.info("Request on getting sub categories by identifiers {}", categories);
+        return categoryService.subCategories(categories, page, pageSize);
     }
 }

@@ -1,6 +1,6 @@
 package com.progastination.utils.client.impl;
 
-import com.progastination.dto.ProductResponseDto;
+import com.progastination.dto.ProductResponseListDto;
 import com.progastination.entity.Shop;
 import com.progastination.utils.AbstractHttpClient;
 import com.progastination.utils.client.ProductClient;
@@ -33,9 +33,9 @@ public class ProductClientImpl extends AbstractHttpClient implements ProductClie
     }
 
     @Override
-    public ProductResponseDto products(String category, Shop shop) {
+    public ProductResponseListDto products(String category, Shop shop) {
         try {
-            return get(url(category, shop), ProductResponseDto.class);
+            return get(url(category, shop), ProductResponseListDto.class);
         } catch (RuntimeException e) {
             log.error("error while getting product by url {}", url(category, shop));
             return emptyResponse();
@@ -53,8 +53,8 @@ public class ProductClientImpl extends AbstractHttpClient implements ProductClie
         return productUrls.get(shop).replace("[category]", category);
     }
 
-    private ProductResponseDto emptyResponse() {
-        ProductResponseDto response = new ProductResponseDto();
+    private ProductResponseListDto emptyResponse() {
+        ProductResponseListDto response = new ProductResponseListDto();
         response.setResults(Collections.emptyList());
         return response;
     }

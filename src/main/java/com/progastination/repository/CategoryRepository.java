@@ -23,8 +23,8 @@ public interface CategoryRepository extends JpaRepository<Category, String>, Pag
     * find subcategories of one category
     * */
     @Query(value = "select string_agg(identifier, ',') as identifiers, sum(count) as totalCount, title, max(image) as image, string_agg(shops, ',') as shops,string_agg(category_identifier, ',')" +
-            "  from categories where category_identifier =:parentIdentifier  group by title", nativeQuery = true)
-    Page<CategoryProjection> findSubCategories(@Param("parentIdentifier") String parentIdentifier, Pageable pageable);
+            "  from categories where category_identifier in(:categoryIdentifiers)  group by title", nativeQuery = true)
+    Page<CategoryProjection> findSubCategories(@Param("categoryIdentifiers") List<String> categoryIdentifiers, Pageable pageable);
 
     /**
     * count total subcategories of category

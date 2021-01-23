@@ -1,5 +1,6 @@
 package com.progastination.service.impl;
 
+import com.progastination.dto.CategoryIdentifiersDto;
 import com.progastination.dto.CategoryImprovedDto;
 import com.progastination.entity.projection.CategoryProjection;
 import com.progastination.repository.CategoryRepository;
@@ -31,8 +32,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public PageDto<CategoryImprovedDto> subCategories(String identifier, int page, int pageSize) {
-        Page<CategoryProjection> result = categoryRepository.findSubCategories(identifier, PagesUtility.createPageableUnsorted(page, pageSize));
+    public PageDto<CategoryImprovedDto> subCategories(CategoryIdentifiersDto categories, int page, int pageSize) {
+        Page<CategoryProjection> result = categoryRepository.findSubCategories(categories.getCategories(), PagesUtility.createPageableUnsorted(page, pageSize));
         return PageDto.of(result.getTotalElements(), page, mapCategoryImproved(result.getContent()));
     }
 

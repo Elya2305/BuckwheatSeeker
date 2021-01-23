@@ -1,6 +1,6 @@
 package com.progastination.utils.data.impl;
 
-import com.progastination.dto.ProductDto;
+import com.progastination.dto.ProductResponseDto;
 import com.progastination.entity.Category;
 import com.progastination.entity.Product;
 import com.progastination.entity.Shop;
@@ -37,7 +37,7 @@ public class ProductInitImpl implements InitDbService {
         for (Shop shop : Shop.values()) {
             for (Category category : categories) {
                 if (category.getShops().contains(shop)) {
-                    List<ProductDto> results = productClient.products(getFullIdentifier(category.getIdentifier(), shop), shop).getResults();
+                    List<ProductResponseDto> results = productClient.products(getFullIdentifier(category.getIdentifier(), shop), shop).getResults();
                     List<Product> map = map(results, category, shop);
                     productRepository.saveAll(map);
                 }
@@ -56,24 +56,23 @@ public class ProductInitImpl implements InitDbService {
         return productRepository.count() == 0;
     }
 
-    private List<Product> map(List<ProductDto> source, Category category, Shop shop) {
-        return source.stream().map(this::map).peek(o -> {
+    private List<Product> map(List<ProductResponseDto> source, Category category, Shop shop) {
+        return source.stream().map(o -> map(o, shop)).peek(o -> {
             o.setCategory(category);
-            o.setShop(shop.getName());
         }).collect(Collectors.toList());
     }
 
-    private Product map(ProductDto source) {
+    private Product map(ProductResponseDto source, Shop shop) {
         Product destination = getOrCreate(getEan(source.getEan()));
         destination.setCategoryId(getCategoryId(source.getCategoryId()));
         destination.setEan(getEan(source.getEan()));
         destination.setImage(source.getImg().getS350x350());
-        destination.setPrice(source.getPrice());
+//        destination.setPrice(source.getPrice());
+        destination.getPrices().put(shop, source.getPrice());
         destination.setTitle(source.getTitle());
         destination.setWebUrl(source.getWebUrl());
         destination.setWeight(source.getWeight());
         destination.setProducer(source.getProducer());
-        destination.setShop(getShopByCategoryId(source.getCategoryId()).getName());
         return destination;
     }
 

@@ -34,8 +34,7 @@ public class CategoryInitImpl implements InitDbService {
             List<String> categories = Category.ShopCategory.categoryIdentifiers();
 
             Arrays.stream(Shop.values()).forEach(shop -> categoryClient.categories(shop)
-                    .stream().filter(o -> categories.contains(getIdentifier(o.getParentId())) ||
-                            categories.contains(getIdentifier(o.getId()))).forEach(this::mapAndSave));
+                    .stream().filter(o -> categories.contains(getIdentifier(o.getParentId())) || categories.contains(getIdentifier(o.getId()))).forEach(this::mapAndSave));
             log.info("*ending to init categories*");
         }
     }

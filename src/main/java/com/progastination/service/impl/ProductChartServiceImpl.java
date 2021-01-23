@@ -46,9 +46,7 @@ public class ProductChartServiceImpl implements ProductChartService {
             dates.stream()
                     .skip(SKIP_NO_CHART_DATES)
                     .filter(element -> element.text().length() > LENGTH_OF_WEEKDAY)
-                    .forEach(e -> {
-                        keys.add(e.text());
-                    });
+                    .forEach(e -> keys.add(e.text()));
             Map<String, Double> chart = IntStream.range(0, keys.size())
                     .boxed()
                     .collect(Collectors.toMap(keys::get, values::get));

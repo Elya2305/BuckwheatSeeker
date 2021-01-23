@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, String>, PagingAndSortingRepository<Product, String> {
@@ -17,11 +18,11 @@ public interface ProductRepository extends JpaRepository<Product, String>, Pagin
     @Query(value = "select p from Product p")
     Page<Product> findAllPageable(Pageable pageable);
 
-    @Query(value = "select p from Product p where p.category.identifier=:category order by p.price asc")
-    Page<Product> findAllByCategory(@Param("category") String category, Pageable pageable);
+    @Query(value = "select p from Product p where p.category.identifier in(:category)")
+    Page<Product> findAllByCategoryIn(@Param("category") List<String> categories, Pageable pageable);
 
-    @Query(value = "select p from Product p where p.category.identifier=:category and p.shop=:shop order by p.price asc ")
-    Page<Product> findAllByCategoryAndShop(String category, String shop, Pageable pageable);
+    @Query(value = "select p from Product p where p.category.identifier=:category")
+    Page<Product> findAllByCategoryAndShop(String category, Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.title LIKE CONCAT('%',:search,'%')")
         // todo add or producer

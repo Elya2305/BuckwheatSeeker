@@ -1,7 +1,6 @@
 package com.progastination.entity;
 
 import com.progastination.dto.ProducerDto;
-import com.progastination.utils.converter.ShopConverter;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,9 +9,10 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
+// todo add unit
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Table(name = "products")
 @Data
@@ -24,14 +24,16 @@ public class Product {
     private String ean;
     private String categoryId;
     private String image;
-    private Integer price;
     private String title;
     private String webUrl;
     private Integer weight;
     @ManyToOne
     private Category category; // parentCategoryId
 
-    private String shop;
+    @MapKeyEnumerated(EnumType.STRING)
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Map<Shop, Integer> prices = new HashMap<>();
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
