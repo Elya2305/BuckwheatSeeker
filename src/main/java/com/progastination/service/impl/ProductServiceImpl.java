@@ -49,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
         destination.setWebUrl(source.getWebUrl());
         destination.setTitle(source.getTitle());
         destination.setWeight(source.getWeight());
+        destination.setUnit(source.getUnit());
         return destination;
     }
 
