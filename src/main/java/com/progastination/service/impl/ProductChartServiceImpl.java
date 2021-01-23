@@ -55,9 +55,8 @@ public class ProductChartServiceImpl implements ProductChartService {
             productChartDto.getValues().putAll(chart);
             return productChartDto;
         }catch (IOException e) {
-            log.error("");// todo
-            throw new RuntimeException(" ... "); // todo make custom exception (just imagine if this method was called from many methods... you should add an exception signature everywhere! So it's better to throw runtime exception)
-
+            log.error("Parse html has an error by url: {}", CHART_URL);
+            throw new RuntimeException(String.format("Jsoup connection failed for url: %s", CHART_URL));
         }
     }
 }
