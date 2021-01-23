@@ -1,37 +1,29 @@
 package com.progastination.web;
 
-import com.progastination.dto.ProducerDto;
 import com.progastination.dto.ProductChartDto;
 import com.progastination.dto.ProductDto;
-import com.progastination.entity.Product;
+import com.progastination.dto.ProductFilterDto;
 import com.progastination.entity.Shop;
-import com.progastination.repository.ProductRepository;
 import com.progastination.service.ProductChartService;
 import com.progastination.service.ProductService;
 import com.progastination.utils.pagination.PageDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.util.Set;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
     private final ProductChartService productChartService;
 
     @GetMapping("/by-category")
     public PageDto<ProductDto> byCategory(@RequestParam String category,
-                                              @RequestParam int page,
-                                              @RequestParam int pageSize) {
-        log.info("Request on getting products by category");
+                                          @RequestParam int page,
+                                          @RequestParam int pageSize) {
+        log.info("Request on getting products by category - {}", category);
         return productService.productsByCategory(category, page, pageSize);
     }
 
@@ -40,11 +32,12 @@ public class ProductController {
                                                  @RequestParam Shop shop,
                                                  @RequestParam int page,
                                                  @RequestParam int pageSize) {
-        log.info("Request on getting products by category and shop");
+        log.info("Request on getting products by category - {},  shop - {}", shop, category);
         return productService.productsByCategoryAndShop(category, shop.getName(), page, pageSize);
     }
+
     @GetMapping("/by-category/chart")
-    public ProductChartDto getChart() throws IOException {
+    public ProductChartDto getChart() {
         log.info("Request on getting product chart");
         return productChartService.getProductChart();
     }

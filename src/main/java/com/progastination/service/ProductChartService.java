@@ -6,5 +6,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProductChartService {
-    ProductChartDto getProductChart() throws IOException;
+    ProductChartDto getProductChart();
 }
