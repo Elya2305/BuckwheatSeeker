@@ -34,7 +34,6 @@ public class BuckwheatServiceImpl implements BuckwheatService {
     private static final String PRICE_AUCHAN = "jsx-3642073353 Price__value_title";
     private static final String PRICE_AGUSIK = "our_price_display";
     private static final String PRICE_PRODUCTOFF = "price-cell__default";
-
     private final static String LETTER_PATTERN = "[^\\d]";
 
 
