@@ -63,7 +63,6 @@ public class ProductFilterServiceImpl implements ProductFilterService {
             product.setTitle(rs.getString(rs.findColumn(ProductTableConstant.TITLE)));
             product.setCategoryId(rs.getString(rs.findColumn(ProductTableConstant.CATEGORY_ID)));
             product.setImg(ImgDto.of(rs.getString(rs.findColumn(ProductTableConstant.IMAGE))));
-            product.setPrices(mapPrice(((PGobject) rs.getObject(rs.findColumn(ProductTableConstant.PRICE))).getValue()));
             product.setProducer(mapProducer(((PGobject) rs.getObject(rs.findColumn(ProductTableConstant.PRODUCER))).getValue()));
             product.setWebUrl(rs.getString(rs.findColumn(ProductTableConstant.WEB_URL)));
             return product;

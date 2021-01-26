@@ -27,4 +27,5 @@ public interface ProductRepository extends JpaRepository<Product, String>, Pagin
     @Query("SELECT p FROM Product p WHERE p.title LIKE CONCAT('%',:search,'%')")
         // todo add or producer
     Page<Product> findByNameOrProducer(@Param("search") String search, Pageable pageable);
-}
+
+    }

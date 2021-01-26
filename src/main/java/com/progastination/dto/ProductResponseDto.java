@@ -11,7 +11,7 @@ public class ProductResponseDto {
     private String ean;
     private String categoryId;
     private ImgDto img;
-    private Integer price;
+    private Double price;
     private String title;
     private String webUrl;
     private Integer weight;

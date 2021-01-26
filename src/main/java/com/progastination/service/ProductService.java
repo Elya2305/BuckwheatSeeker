@@ -9,4 +9,7 @@ public interface ProductService {
     PageDto<ProductDto> productsBySearch(String search, int page, int pageSize);
 
     PageDto<ProductDto> productsByFilter(ProductFilterDto filter, int page, int pageSize);
+
+    PageDto<ProductDto> buckwheatSearch(String category,int page, int pageSize);
+
 }

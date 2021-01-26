@@ -1,7 +1,6 @@
 package com.progastination.utils.data.impl;
 
 import com.progastination.dto.ProductResponseDto;
-import com.progastination.dto.ShopPriceDto;
 import com.progastination.entity.Category;
 import com.progastination.entity.Product;
 import com.progastination.entity.Shop;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
+// todo save producer
 @Slf4j
 @Service(value = ProductInitImpl.PRODUCT_INITIALIZER)
 @AllArgsConstructor
@@ -67,20 +67,15 @@ public class ProductInitImpl implements InitDbService {
         destination.setCategoryId(getCategoryId(source.getCategoryId()));
         destination.setEan(getEan(source.getEan()));
         destination.setImage(source.getImg().getS350x350());
-        ShopPriceDto price = destination.getOrCreatePriceByShop(shop);
-        price.setPrice(convertPrice(source.getPrice()));
-        destination.addPrice(price);
+        destination.setPrice(source.getPrice());
+//        destination.getPrices().put(shop, source.getPrice());
+        destination.setShop(shop.getName());
         destination.setTitle(source.getTitle());
         destination.setWebUrl(source.getWebUrl());
         destination.setWeight(source.getWeight());
         destination.setProducer(source.getProducer());
         destination.setUnit(source.getUnit());
         return destination;
-    }
-
-    private Double convertPrice(Integer price) {
-        String str = String.valueOf(price);
-        return Double.valueOf(str.substring(0, str.length() - 2) + "." + str.substring(str.length() - 2));
     }
 
     private Product getOrCreate(String ean) {
@@ -97,6 +92,7 @@ public class ProductInitImpl implements InitDbService {
     private String getEan(String fullEan) {
         if (isNull(fullEan)) return null;
         return fullEan.replaceAll(LETTER_PATTERN, "");
+//        return fullEan;
     }
 
     private Shop getShopByCategoryId(String fullIdentifier) {

@@ -17,13 +17,13 @@ import java.util.Map;
 @Service
 public class ProductClientImpl extends AbstractHttpClient implements ProductClient {
     private final Map<Shop, String> productUrls;
-    private static final String AUCHAN_PRODUCTS = "https://stores-api.zakaz.ua/stores/48246401/categories/[category]/products";
+    private static final String AUCHAN_CATEGORIES = "https://stores-api.zakaz.ua/stores/48246401/categories/[category]/products";
     private static final String METRO_CATEGORIES = "https://stores-api.zakaz.ua/stores/48215611/categories/[category]/products";
     private static final String EKO_MARKET_CATEGORIES = "https://stores-api.zakaz.ua/stores/48280214/categories/[category]/products";
 
     {
         productUrls = new HashMap<>();
-        productUrls.put(Shop.AUCHAN, AUCHAN_PRODUCTS);
+        productUrls.put(Shop.AUCHAN, AUCHAN_CATEGORIES);
         productUrls.put(Shop.METRO, METRO_CATEGORIES);
         productUrls.put(Shop.EKO_MARKET, EKO_MARKET_CATEGORIES);
     }

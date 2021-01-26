@@ -30,4 +30,5 @@ public class ProductController {
         log.info("Request on getting products by filter - {}", filter);
         return productService.productsByFilter(filter, page, pageSize);
     }
+
 }

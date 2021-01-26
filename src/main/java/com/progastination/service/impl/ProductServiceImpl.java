@@ -36,6 +36,12 @@ public class ProductServiceImpl implements ProductService {
         return PageDto.of(products.size(), page, products);
     }
 
+    @Override
+    public PageDto<ProductDto> buckwheatSearch(String category, int page, int pageSize) {
+        Page<Product> result = productRepository.findAllByCategoryAndShop(category,PagesUtility.createPageableUnsorted(page, pageSize));
+        return PageDto.of(result.getTotalElements(), page, map(result.getContent()));
+    }
+
     private List<ProductDto> map(List<Product> source) {
         return source.stream().map(this::map).collect(Collectors.toList());
     }
@@ -45,11 +51,19 @@ public class ProductServiceImpl implements ProductService {
         destination.setCategoryId(source.getCategoryId());
         destination.setEan(source.getEan());
         destination.setImg(ImgDto.of(source.getImage()));
-//        destination.setPrices(source.getPrices());
+        destination.setPrice(source.getPrice());
         destination.setWebUrl(source.getWebUrl());
         destination.setTitle(source.getTitle());
         destination.setWeight(source.getWeight());
         destination.setUnit(source.getUnit());
+        destination.setShop(source.getShop());
         return destination;
+    }
+
+    private Map<String, Integer> map(Map<Shop, Integer> map) {
+        return map.entrySet().stream().collect(Collectors.toMap(
+                o -> o.getKey().name(),
+                Map.Entry::getValue
+        ));
     }
 }
